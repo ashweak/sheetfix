@@ -7,7 +7,7 @@
 - [x] README, LICENSE (MIT), SECURITY, CONTRIBUTING, CHANGELOG
 - [x] Use fits the plan’s 2026-11-15 reading of GitHub Pages limits (noncommercial open-source demo, no transactions, small static site)
 - [ ] Re-read https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits before any change in how the tool is offered
-- [x] Pages source: `main` branch, `/docs` folder
+- [x] Live demo deployed by copying `docs/` to `ashweak.github.io/sheetfix/` (redeploy the same way after each release)
 - [ ] Live smoke test at https://ashweak.github.io/sheetfix/ (all three workflows, worker, downloads, refresh)
 - [ ] Tag `v1.0.0` recorded with release commit
 - [ ] Real-device check: Android Chrome, iOS Safari (record versions before listing as supported)

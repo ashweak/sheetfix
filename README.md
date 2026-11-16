@@ -4,7 +4,7 @@ A browser-based tool for cleaning CSV files, finding duplicates, and comparing b
 
 **Choose your file, review the fixes, and download a clean copy.**
 
-**Live demo:** https://ashweak.github.io/sheetfix/ (noncommercial project demonstration)
+**Live demo:** https://ashweak.github.io/sheetfix/ (noncommercial project demonstration; a copy of `docs/` published from the portfolio site repo)
 
 SheetFix is for small retailers, online sellers and office staff who work with CSV exports — product lists, supplier price lists, customer and order exports. Every change is previewed before it happens, the imported file is never modified, and nothing leaves the device.
 
