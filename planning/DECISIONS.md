@@ -1,0 +1,13 @@
+# Implementation decisions (v1.0)
+
+| # | Decision | Reason |
+|---|---|---|
+| D1 | **Own CSV parser instead of Papa Parse.** The plan named Papa Parse as a *candidate* to confirm. The shipped parser (`core/csv-parse.js`, ~250 lines) is covered by our acceptance tests. | V1 needs record numbers distinct from physical lines, strict blocking of malformed quotes (not best-effort recovery), limits enforced *during* parsing, and no header renaming. Owning the parser removes a vendored dependency and its notice from `docs/`. Papa Parse can still be adopted later behind `io/import.js`. |
+| D2 | Stateless worker: each job sends its input; cancelling terminates the worker. | Simplest way to guarantee no partial result and no stale reply (job ids). Measured cost of copying 20k × 20 is well under a second. |
+| D3 | Recipe preview recomputes from the immutable dataset on every change (debounced 350 ms). | Reapplying can never compound; undo/redo store only recipes. History is capped at 50 steps while always keeping the original for reset. |
+| D4 | A key repeated on one side of a comparison also excludes the matching rows on the other side (`duplicate-key-other-side`). | Otherwise those rows would be reported as Added/Removed, which is a false claim. Both invariants still hold. |
+| D5 | Keep-first/keep-last applies automatically to fully identical groups only; conflicting groups need an explicit "reviewed" mark or a manual choice. Undecided groups keep all rows. | Plan §7: conflicts require review before any exclusion policy. |
+| D6 | Spreadsheet-safe export protects `= + - @`, tab/CR/LF, leading whitespace/NBSP before them, and full-width `＝＋－＠`. Optional "leave plain numbers unprotected". | Plan §9 risky leading variants; negative numbers and phone numbers get explicit handling. |
+| D7 | Header edits affect exported files only; matching uses original column positions. | Avoids confusing mid-review relabelling. |
+| D8 | Content-Security-Policy meta tag (`default-src 'self'`, `form-action 'none'`), `no-referrer`. | Enforces "no external scripts/fonts/CDNs" and blocks accidental data exfiltration by app code. |
+| D9 | Hosting: GitHub Pages from `main` `/docs` as a noncommercial, open-source project demonstration. No checkout, ads or commercial service. | Matches the plan’s 2026-11-15 reading of the GitHub Pages limits page; recheck before any commercial use. |

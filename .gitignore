@@ -1,0 +1,31 @@
+# Dependencies and tool output
+node_modules/
+test-results/
+playwright-report/
+coverage/
+*.log
+
+# Private data — never commit real business files
+private/
+inputs/
+downloads/
+exports/
+*.local.csv
+*_cleaned.csv
+*_deduplicated.csv
+*_excluded.csv
+*_change_log.csv
+*_issues.csv
+*_comparison_*.csv
+*_field_changes.csv
+
+# Secrets and OS files
+.env
+.env.*
+*.pem
+.DS_Store
+Thumbs.db
+
+# Synthetic fixtures and samples are tracked explicitly
+!docs/samples/*.csv
+!tests/fixtures/*.csv

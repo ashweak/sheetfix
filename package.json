@@ -1,0 +1,19 @@
+{
+  "name": "sheetfix",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A browser-based tool for cleaning CSV files, finding duplicates, and comparing business data.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/unit/*.test.mjs",
+    "test:browser": "node tests/browser/smoke.mjs",
+    "serve": "node tests/serve.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

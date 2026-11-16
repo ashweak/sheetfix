@@ -1,0 +1,22 @@
+// Rough domain benchmark: 20,000 rows x 20 short-text columns (synthetic). Not a browser measurement.
+import { importFile } from '../docs/assets/js/io/import.js';
+import { applyRecipe, defaultRecipe } from '../docs/assets/js/core/recipe.js';
+import { findDuplicates } from '../docs/assets/js/core/duplicates.js';
+import { compareLists } from '../docs/assets/js/core/compare.js';
+import { writeCsv } from '../docs/assets/js/core/csv-write.js';
+const cols = 20, rows = 20000;
+const head = Array.from({ length: cols }, (_, i) => 'col' + i).join(',');
+const lines = [head];
+for (let r = 0; r < rows; r++) lines.push(Array.from({ length: cols }, (_, c) => (c === 0 ? String(r % 19000).padStart(6, '0') : ` v${r}-${c} `)).join(','));
+const csv = lines.join('\n') + '\n';
+const t = (label, fn) => { const s = performance.now(); const out = fn(); console.log(label.padEnd(28), (performance.now() - s).toFixed(0), 'ms'); return out; };
+console.log('input size', (csv.length / 1048576).toFixed(2), 'MiB');
+const imp = t('import (decode+parse+build)', () => importFile({ bytes: new TextEncoder().encode(csv).buffer, settings: { delimiter: 'auto', hasHeader: true } }));
+const recipe = defaultRecipe();
+recipe.trim = { on: true, cols: imp.dataset.columns.map((c) => c.id) };
+recipe.case = { on: true, cols: ['c1', 'c2', 'c3'], mode: 'upper' };
+const cleaned = t('recipe (trim all, case 3)', () => applyRecipe(imp.dataset, recipe));
+t('duplicates (1 key)', () => findDuplicates(cleaned.rows, [0]));
+const side = { columns: imp.dataset.columns, rows: cleaned.rows };
+t('compare (20k vs 20k, 19 fields)', () => compareLists(side, { columns: imp.dataset.columns, rows: imp.dataset.rows }, { keys: [{ a: 0, b: 0 }], fields: Array.from({ length: 19 }, (_, i) => ({ a: i + 1, b: i + 1, label: 'f' + i })) }));
+t('export (safe CSV)', () => writeCsv(null, cleaned.rows.map((r) => r.cells)));
